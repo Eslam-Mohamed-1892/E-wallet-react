@@ -25,15 +25,23 @@ export default function MainHeader({ theme, setTheme }) {
                         className='w-7 h-7 cursor-pointer md:hidden'
                         onClick={() => setOpen(!open)}
                     />
+                    <button
+                        onClick={() =>
+                            setTheme(theme === "dark" ? "light" : "dark")
+                        }
+                        className='px-4 py-2 rounded-box bg-green-500 hidden md:flex'
+                    >
+                        {theme === "dark" ? "☀️" : "🌙"}
+                    </button>
+
                 </div>
             </div>
 
             {/* DROPDOWN MENU (OUTSIDE HEADER) */}
             {open && (
-                <div className='md:hidden absolute top-full left-0 w-full bg-[#0E0E0E] flex flex-col items-center gap-4 py-4 text-white shadow-lg'>
-                    <Link to="/" onClick={() => setOpen(false)}>Log in</Link>
+                <div className='z-50 md:hidden absolute top-full left-0 w-full bg-[#0E0E0E] dark:bg-[#0B1220] flex flex-col items-center gap-4 py-4 text-white shadow-lg'>                    <Link to="/" onClick={() => setOpen(false)}>Log in</Link>
                     <Link to="/transactions" onClick={() => setOpen(false)}>Transactions</Link>
-                    
+
                     <button
                         onClick={() =>
                             setTheme(theme === "dark" ? "light" : "dark")

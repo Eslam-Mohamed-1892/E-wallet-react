@@ -129,8 +129,8 @@ export default function TransactionsHistory() {
                 </span>
                 <input ref={amountInput} type="text" className=' input input-success w-full text-black mb-5 placeholder:text-black font-bold mt-5' placeholder='Enter the amount' />
                 <span className='flex flex-row gap-5 mb-5'>
-                    <button onClick={depositAmount} className='btn btn-success text-white font-bold'>deposit</button>
-                    <button onClick={withdrawAmount} className='btn btn-error text-white font-bold'>withdraw</button>
+                    <button onClick={depositAmount} className='btn btn-success text-white font-bold'>Deposit</button>
+                    <button onClick={withdrawAmount} className='btn btn-error text-white font-bold'>Withdraw</button>
                 </span>
             </div>
             <button onClick={() => setShowTransactions(!showTransactions)}
@@ -150,7 +150,7 @@ export default function TransactionsHistory() {
                                     <th>transaction type</th>
                                     <th>amount</th>
                                     <th>current balance</th>
-                                    <th>time</th>
+                                    <th>day • time</th>
                                     <th>action</th>
                                 </tr>
                             </thead>
@@ -260,7 +260,7 @@ export default function TransactionsHistory() {
 
                                     <p>
                                         <span className='font-semibold'>
-                                            day:
+                                            day • time:
                                         </span>{" "}
                                         {el.time}
                                     </p>
@@ -297,7 +297,7 @@ export default function TransactionsHistory() {
             </dialog>
             <dialog id="confirmModal" className="modal">
                 <div className="modal-box">
-                    <h1 className='text-black dark:text-white'>Delete confirm</h1>
+                    <h1 className='text-black'>Delete confirm</h1>
                     <p className="py-4">Write yes or no</p>
                     <input value={confirmInput} onChange={(e) => setConfirmInput(e.target.value)} type="text" className='input input-success text-black placeholder:text-black' placeholder='Enter your password' />
                     <div className="modal-action">
