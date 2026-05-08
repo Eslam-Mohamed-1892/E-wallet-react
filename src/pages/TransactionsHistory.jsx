@@ -82,7 +82,7 @@ export default function TransactionsHistory() {
 
     }
     const deleteConfirm = () => {
-        if (transactions.length === 1) return
+        if (transactions.length === 0) return
 
         const last = transactions[transactions.length - 1]
 
