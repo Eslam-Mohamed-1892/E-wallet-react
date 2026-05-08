@@ -2,18 +2,25 @@ import dayjs from 'dayjs'
 import React, { useActionState, useRef, useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast'
+import useLocalStorage from "../hooks/useLocalStorage"
+import { Navigate } from "react-router-dom"
 
 
 export default function TransactionsHistory() {
-    const [transactions, settransactions] = useState([])
+    const [loggedUser] = useLocalStorage("user", null)
+
+    const [transactions, setTransactions] = useLocalStorage("transactions", [])
+    const [balance, setBalance] = useLocalStorage("balance", 0)
     const [message2, setMessage2] = useState("")
-    const [balance, setBalance] = useState(0)
     const [passwordInput, setPasswordInput] = useState("")
     const amountInput = useRef()
     const [showTransactions, setShowTransactions] = useState(false)
     const [confirmInput, setConfirmInput] = useState("")
     const openBalanceModal = () => {
         document.getElementById('my_modal_1').showModal()
+    }
+    if (!loggedUser) {
+        return <div className='text-black dark:text-white'>Please login first</div>
     }
     const showBalance = () => {
         const savePassword = "189202"
@@ -39,7 +46,7 @@ export default function TransactionsHistory() {
         }
         let copy = [...transactions]
         copy.push(newTransaction)
-        settransactions(copy)
+        setTransactions(copy)
         setBalance(balance + amount)
         amountInput.current.value = ""
     }
@@ -59,7 +66,7 @@ export default function TransactionsHistory() {
             }
             let copy = [...transactions]
             copy.push(newTransaction)
-            settransactions(copy)
+            setTransactions(copy)
             setBalance(balance - amount)
 
         } else {
@@ -98,7 +105,7 @@ export default function TransactionsHistory() {
             const copy = [...transactions]
             copy.pop()
 
-            settransactions(copy)
+            setTransactions(copy)
             setBalance(newBalance)
         } else if (userConfirm === "no") {
             toast('احسن برضو', {
@@ -115,9 +122,9 @@ export default function TransactionsHistory() {
                 position="top-center"
                 reverseOrder={false}
             />
-            <div className='w-95 h-60 bg-gray-50 rounded mb-5 p-5 flex flex-col items-center'>
+            <div className='w-95 h-60 bg-white dark:bg-[#1E293B] rounded mb-5 p-5 flex flex-col items-center'>
                 <span className='flex flex-row items-center gap-5 justify-end'>
-                    <h1 className='text-black font-bold'>Your balance is : {message2}</h1>
+                    <h1 className='text-black dark:text-white font-bold'>Your balance is : {message2}</h1>
                     <button onClick={openBalanceModal} className='btn btn-success text-white'>Show Balance</button>
                 </span>
                 <input ref={amountInput} type="text" className=' input input-success w-full text-black mb-5 placeholder:text-black font-bold mt-5' placeholder='Enter the amount' />
@@ -134,10 +141,10 @@ export default function TransactionsHistory() {
                     {/* DESKTOP TABLE */}
                     <div className="hidden md:block w-full h-50 overflow-y-auto rounded-lg shadow">
 
-                        <table className='table w-full bg-white text-center'>
+                        <table className='table w-full bg-white dark:bg-[#1E293B] text-center'>
 
-                            <thead className='sticky top-0 bg-white z-10'>
-                                <tr className='text-black'>
+                            <thead className='sticky top-0 bg-white dark:bg-[#1E293B]'>
+                                <tr className='text-black dark:text-white'>
                                     <th>seq</th>
                                     <th>previous balance</th>
                                     <th>transaction type</th>
@@ -150,7 +157,7 @@ export default function TransactionsHistory() {
 
                             <tbody>
                                 {transactions.map((el, index) => (
-                                    <tr key={index} className='text-black'>
+                                    <tr key={index} className='text-black dark:text-white'>
 
                                         <td>{index + 1}</td>
 
@@ -205,7 +212,7 @@ export default function TransactionsHistory() {
                         {transactions.map((el, index) => (
                             <div
                                 key={index}
-                                className='bg-white p-4 rounded-xl shadow text-black'
+                                className='bg-white dark:bg-[#1E293B] p-4 rounded-xl shadow text-black dark:text-white'
                             >
 
                                 <p className='font-bold mb-2'>
@@ -228,7 +235,7 @@ export default function TransactionsHistory() {
                                                 : "text-error font-semibold"
                                         }
                                     >
-                                        <span className='text-black'>Type:</span>{" "}
+                                        <span className='text-black dark:text-white'>Type:</span>{" "}
                                         {el.transactionType}
                                     </p>
 
@@ -239,7 +246,7 @@ export default function TransactionsHistory() {
                                                 : "text-error font-bold"
                                         }
                                     >
-                                        <span className='text-black'>Amount:</span>{" "}
+                                        <span className='text-black dark:text-white'>Amount:</span>{" "}
                                         {el.transactionType === "deposit" ? "+" : "-"}
                                         {el.amount}
                                     </p>
@@ -277,7 +284,7 @@ export default function TransactionsHistory() {
             )}            {/* Open the modal using document.getElementById('ID').showModal() method */}
             <dialog id="my_modal_1" className="modal">
                 <div className="modal-box">
-                    <h1 className='text-black'>Hello!</h1>
+                    <h1 className='text-black dark:text-white'>Hello!</h1>
                     <p className="py-4">Enter your password</p>
                     <input value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} type="text" className='input input-success text-black placeholder:text-black' placeholder='Enter your password' />
                     <div className="modal-action">
@@ -290,7 +297,7 @@ export default function TransactionsHistory() {
             </dialog>
             <dialog id="confirmModal" className="modal">
                 <div className="modal-box">
-                    <h1 className='text-black'>Delete confirm</h1>
+                    <h1 className='text-black dark:text-white'>Delete confirm</h1>
                     <p className="py-4">Write yes or no</p>
                     <input value={confirmInput} onChange={(e) => setConfirmInput(e.target.value)} type="text" className='input input-success text-black placeholder:text-black' placeholder='Enter your password' />
                     <div className="modal-action">
