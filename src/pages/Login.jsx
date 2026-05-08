@@ -40,7 +40,7 @@ export default function Login() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         type="text"
-                        className='input input-success text-black dark:text-white placeholder:text-black font-bold'
+                        className='input input-success text-black placeholder:text-black font-bold'
                         placeholder='Enter your phone number'
                     />
                     <button onClick={handleLogin} className="btn btn-primary">
