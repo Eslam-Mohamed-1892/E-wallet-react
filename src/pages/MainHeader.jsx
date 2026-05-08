@@ -39,7 +39,7 @@ export default function MainHeader({ theme, setTheme }) {
 
             {/* DROPDOWN MENU (OUTSIDE HEADER) */}
             {open && (
-                <div className='z-50 md:hidden absolute top-full left-0 w-full bg-gray-100 dark:bg-[#0B1220] flex flex-col items-center gap-4 py-4 text-black dark:text-white shadow-lg'>
+                <div className='z-50 md:hidden absolute top-full left-0 w-full bg-gray-100 dark:bg-[#1E293B] flex flex-col items-center gap-4 py-4 text-black dark:text-white shadow-lg'>
                     <Link to="/" onClick={() => setOpen(false)}>Log in</Link>
                     <Link to="/transactions" onClick={() => setOpen(false)}>Transactions</Link>
 

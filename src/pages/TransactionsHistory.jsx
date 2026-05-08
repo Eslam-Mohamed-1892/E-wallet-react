@@ -122,7 +122,7 @@ export default function TransactionsHistory() {
                 position="top-center"
                 reverseOrder={false}
             />
-            <div className='w-95 h-60 bg-white dark:bg-[#1E293B] rounded mb-5 p-5 flex flex-col items-center'>
+            <div className='w-95 h-60 bg-white dark:bg-[#1E293B] rounded mb-5 p-5 flex flex-col items-center shadow-lg'>
                 <span className='flex flex-row items-center gap-5 justify-end'>
                     <h1 className='text-black dark:text-white font-bold'>Your balance is : {message2}</h1>
                     <button onClick={openBalanceModal} className='btn btn-success text-white'>Show Balance</button>
@@ -134,12 +134,12 @@ export default function TransactionsHistory() {
                 </span>
             </div>
             <button onClick={() => setShowTransactions(!showTransactions)}
-                className={`btn ${showTransactions ? "bg-error" : "bg-success"} text-white mb-5`}> {showTransactions ? "Close" : "Show Transactions"}</button>
+                className={`btn ${showTransactions ? "bg-error" : "bg-success"} text-white mb-5 shadow-lg`}> {showTransactions ? "Close" : "Show Transactions"}</button>
             {showTransactions && (
                 <>
 
                     {/* DESKTOP TABLE */}
-                    <div className="hidden md:block w-full h-50 overflow-y-auto rounded-lg shadow">
+                    <div className="hidden md:block w-full h-50 overflow-y-auto rounded-lg shadow-lg">
 
                         <table className='table w-full bg-white dark:bg-[#1E293B] text-center'>
 

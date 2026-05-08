@@ -12,7 +12,7 @@ export default function App() {
 		document.documentElement.classList.add(theme)
 	}, [theme])
 	return (
-		<div className='w-full min-h-dvh flex flex-col bg-[#F8FAFC] dark:bg-[#0B1220]'>
+		<div className='w-full min-h-dvh flex flex-col bg-[#f8fafcb4] dark:bg-[#0B1220]'>
 			<BrowserRouter>
 				<MainHeader theme={theme} setTheme={setTheme} />
 				<Routes>
