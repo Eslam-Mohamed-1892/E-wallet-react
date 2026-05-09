@@ -21,7 +21,7 @@ export default function Login({ setLoggedUser, loggedUser }) {
             setPhone("")
             toast.success('Logged in successfully!')
         } else {
-            setMessage("User not found")
+            toast.error("المستخدم مش موجود")
         }
     }
 
@@ -36,6 +36,11 @@ export default function Login({ setLoggedUser, loggedUser }) {
                     <input
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleLogin()
+                            }
+                        }}
                         type="text"
                         className='input input-success text-black placeholder:text-black font-bold'
                         placeholder='Enter your phone number'

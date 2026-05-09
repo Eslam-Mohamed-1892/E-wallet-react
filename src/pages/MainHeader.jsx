@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { HiMenu } from "react-icons/hi";
 
-export default function MainHeader({ theme, setTheme }) {
+export default function MainHeader({ theme, setTheme, handleLogout }) {
     const [open, setOpen] = useState(false)
+
 
     return (
         <div className='relative'>
@@ -21,10 +22,7 @@ export default function MainHeader({ theme, setTheme }) {
                         <Link to="/transactions" onClick={() => setOpen(false)}>Transactions</Link>
                     </nav>
 
-                    <HiMenu
-                        className='w-7 h-7 cursor-pointer md:hidden'
-                        onClick={() => setOpen(!open)}
-                    />
+                    <span className='flex gap-3'>
                     <button
                         onClick={() =>
                             setTheme(theme === "dark" ? "light" : "dark")
@@ -33,6 +31,18 @@ export default function MainHeader({ theme, setTheme }) {
                     >
                         {theme === "dark" ? "☀️" : "🌙"}
                     </button>
+
+                    <button
+                        onClick={handleLogout}
+                        className="btn btn-error text-white font-bold hidden md:flex"
+                    >
+                        Logout
+                    </button>
+                    </span>
+                    <HiMenu
+                        className='w-7 h-7 cursor-pointer md:hidden'
+                        onClick={() => setOpen(!open)}
+                    />
 
                 </div>
             </div>
@@ -50,6 +60,16 @@ export default function MainHeader({ theme, setTheme }) {
                         className='px-4 py-2 rounded-box bg-green-500'
                     >
                         {theme === "dark" ? "☀️" : "🌙"}
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            handleLogout()
+                            setOpen(false)
+                        }}
+                        className="btn btn-error w-full"
+                    >
+                        Logout
                     </button>
 
                 </div>

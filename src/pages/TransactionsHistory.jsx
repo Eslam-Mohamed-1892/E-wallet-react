@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import React, { useActionState, useRef, useState } from 'react'
+import React, { useActionState, useRef, useState, useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast'
 import useLocalStorage from "../hooks/useLocalStorage"
@@ -8,7 +8,6 @@ import { Navigate } from "react-router-dom"
 
 export default function TransactionsHistory() {
     const [loggedUser] = useLocalStorage("user", null)
-
     const [transactions, setTransactions] = useLocalStorage("transactions", [])
     const [balance, setBalance] = useLocalStorage("balance", 0)
     const [message2, setMessage2] = useState("")
@@ -24,9 +23,12 @@ export default function TransactionsHistory() {
     }
     const showBalance = () => {
         const savePassword = "189202"
+        const usePassowrd = passwordInput.trim()
         if (passwordInput == savePassword) {
+            toast.success("كلمة مرور صحيحه")
             setMessage2(`${balance}`)
         } else {
+            toast.error("كلمة مرور خاطئه")
             setMessage2("------")
         }
         setPasswordInput("")
@@ -74,6 +76,11 @@ export default function TransactionsHistory() {
         }
         amountInput.current.value = ""
     }
+    useEffect(() => {
+        if (transactions.length === 0) {
+            setShowTransactions(false)
+        }
+    }, [transactions])
 
     const openConfirmModal = () => {
         if (transactions.length === 0) return
@@ -81,42 +88,45 @@ export default function TransactionsHistory() {
         document.getElementById('confirmModal').showModal()
 
     }
-const deleteConfirm = () => {
+    const deleteConfirm = () => {
 
-	const last = transactions[transactions.length - 1]
+        const last = transactions[transactions.length - 1]
 
-	const userConfirm = confirmInput.trim().toLowerCase()
+        const userConfirm = confirmInput.trim().toLowerCase()
 
-	if (userConfirm !== "yes" && userConfirm !== "no") {
+        if (userConfirm === "yes") {
 
-		toast.error("بلاش غباء اكتب اللي قولت لك عليه")
+            setBalance(prev =>
+                last.transactionType === "deposit"
+                    ? prev - last.amount
+                    : prev + last.amount
+            )
 
-	}
+            setTransactions(prev => prev.slice(0, -1))
 
-	else if (userConfirm === "yes") {
+            toast.success("تم الحذف بنجاح ي كبير")
 
-		setBalance(prev =>
-			last.transactionType === "deposit"
-				? prev - last.amount
-				: prev + last.amount
-		)
+        }
+        else if (userConfirm === "no") {
 
-		setTransactions(prev => prev.slice(0, -1))
+            toast('احسن برضو', {
+                icon: '👏',
+            })
 
-		toast.success("تم الحذف بنجاح ي كبير")
+        }
+        else {
 
-	}
+            toast.error("بلاش غباء اكتب اللي قولت لك عليه")
 
-	else {
+        }
 
-		toast('احسن برضو', {
-			icon: '👏',
-		})
+        setConfirmInput("")
+    }
 
-	}
-
-	setConfirmInput("")
-}
+    const handleSubmet = () => {
+        showBalance()        // أو أي function عندك
+        setOpen(false)       // يقفل المودال
+    }
 
     return (
         <div className='flex flex-col items-center py-4 md:py-6'>
@@ -135,7 +145,7 @@ const deleteConfirm = () => {
                     <button onClick={withdrawAmount} className='btn btn-error text-white font-bold'>Withdraw</button>
                 </span>
             </div>
-            <button disabled={transactions.length === 0} onClick={() => setShowTransactions(!showTransactions)}
+            <button onClick={() => setShowTransactions(prev => !prev)}
                 className={`btn ${showTransactions ? "bg-error" : "bg-success"} text-white mb-5 shadow-lg`}> {showTransactions ? "Close" : "Show Transactions"}</button>
             {showTransactions && (
                 <>
@@ -288,8 +298,18 @@ const deleteConfirm = () => {
                 <div className="modal-box">
                     <h1 className='text-black dark:text-white'>Hello!</h1>
                     <p className="py-4">Enter your password</p>
-                    <input value={passwordInput} onChange={(e) => setPasswordInput(e.target.value)} type="text" className='input input-success text-black placeholder:text-black' placeholder='Enter your password' />
-                    <div className="modal-action">
+                    <input
+                        value={passwordInput}
+                        onChange={(e) => setPasswordInput(e.target.value)}
+                        type="text"
+                        className='input input-success text-black placeholder:text-black'
+                        placeholder='Enter your password'
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                handleSubmet() // أو أي function عندك
+                            }
+                        }}
+                    />                    <div className="modal-action">
                         <form method="dialog">
                             {/* if there is a button in form, it will close the modal */}
                             <button onClick={showBalance} className="btn btn-success text-white">Submit</button>

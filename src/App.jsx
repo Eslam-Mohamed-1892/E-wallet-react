@@ -8,17 +8,18 @@ import useLocalStorage from "./hooks/useLocalStorage"
 
 export default function App() {
 	const [loggedUser, setLoggedUser] = useLocalStorage("user", null)
-	console.log("loggedUser =", loggedUser)
-
 	const [theme, setTheme] = useLocalStorage("theme", "dark")
 	useEffect(() => {
 		document.documentElement.classList.remove("light", "dark")
 		document.documentElement.classList.add(theme)
 	}, [theme])
+	const handleLogout = () => {
+		setLoggedUser(null)
+	}
 	return (
 		<div className='w-full min-h-dvh flex flex-col bg-[#f8fafcb4] dark:bg-[#0B1220]'>
 			<BrowserRouter>
-				<MainHeader theme={theme} setTheme={setTheme} />
+				<MainHeader theme={theme} setTheme={setTheme} handleLogout={handleLogout} />
 				<Routes>
 					<Route
 						path="/"
@@ -41,7 +42,8 @@ export default function App() {
 							)
 						}
 					/>
-				</Routes>			</BrowserRouter>
+				</Routes>
+			</BrowserRouter>
 
 		</div>)
 }
