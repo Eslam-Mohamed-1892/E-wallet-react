@@ -76,45 +76,47 @@ export default function TransactionsHistory() {
     }
 
     const openConfirmModal = () => {
-        if (transactions.length === 1) return
+        if (transactions.length === 0) return
 
         document.getElementById('confirmModal').showModal()
 
     }
-    const deleteConfirm = () => {
-        if (transactions.length === 0) return
+const deleteConfirm = () => {
 
-        const last = transactions[transactions.length - 1]
+	const last = transactions[transactions.length - 1]
 
-        let newBalance = balance
+	const userConfirm = confirmInput.trim().toLowerCase()
 
-        const userConfirm = confirmInput.trim().toLowerCase()
+	if (userConfirm !== "yes" && userConfirm !== "no") {
 
-        if (userConfirm !== "yes" && userConfirm !== "no") {
-            toast.error("بلاش غباء اكتب اللي قولت لك عليه")
-        }
+		toast.error("بلاش غباء اكتب اللي قولت لك عليه")
 
-        else if (userConfirm === "yes") {
-            if (last.transactionType === "deposit") {
-                newBalance -= last.amount
-            } else if (last.transactionType === "withdraw") {
-                newBalance += last.amount
-            }
-            toast.success("تم الحذف بنجاح ي كبير")
+	}
 
-            const copy = [...transactions]
-            copy.pop()
+	else if (userConfirm === "yes") {
 
-            setTransactions(copy)
-            setBalance(newBalance)
-        } else if (userConfirm === "no") {
-            toast('احسن برضو', {
-                icon: '👏',
-            });
-        }
-        setConfirmInput("")
-    }
+		setBalance(prev =>
+			last.transactionType === "deposit"
+				? prev - last.amount
+				: prev + last.amount
+		)
 
+		setTransactions(prev => prev.slice(0, -1))
+
+		toast.success("تم الحذف بنجاح ي كبير")
+
+	}
+
+	else {
+
+		toast('احسن برضو', {
+			icon: '👏',
+		})
+
+	}
+
+	setConfirmInput("")
+}
 
     return (
         <div className='flex flex-col items-center py-4 md:py-6'>
@@ -133,7 +135,7 @@ export default function TransactionsHistory() {
                     <button onClick={withdrawAmount} className='btn btn-error text-white font-bold'>Withdraw</button>
                 </span>
             </div>
-            <button onClick={() => setShowTransactions(!showTransactions)}
+            <button disabled={transactions.length === 0} onClick={() => setShowTransactions(!showTransactions)}
                 className={`btn ${showTransactions ? "bg-error" : "bg-success"} text-white mb-5 shadow-lg`}> {showTransactions ? "Close" : "Show Transactions"}</button>
             {showTransactions && (
                 <>

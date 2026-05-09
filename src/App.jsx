@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Login from './pages/Login'
 import MainHeader from './pages/MainHeader'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import TransactionsHistory from './pages/TransactionsHistory'
 import useLocalStorage from "./hooks/useLocalStorage"
 
+
 export default function App() {
+	const [loggedUser, setLoggedUser] = useLocalStorage("user", null)
+	console.log("loggedUser =", loggedUser)
+
 	const [theme, setTheme] = useLocalStorage("theme", "dark")
 	useEffect(() => {
 		document.documentElement.classList.remove("light", "dark")
@@ -16,15 +20,28 @@ export default function App() {
 			<BrowserRouter>
 				<MainHeader theme={theme} setTheme={setTheme} />
 				<Routes>
-					<Route path="/" element={<div className="flex-1 flex justify-center items-center">
-						<Login />
-					</div>
-					} />
-					<Route path="/transactions" element={<div className="flex-1 flex justify-center items-center">
-						<TransactionsHistory />
-					</div>} />
-				</Routes>
-			</BrowserRouter>
+					<Route
+						path="/"
+						element={
+							<div className="flex-1 flex justify-center items-center">
+								<Login setLoggedUser={setLoggedUser} loggedUser={loggedUser} />
+							</div>
+						}
+					/>
+
+					<Route
+						path="/transactions"
+						element={
+							loggedUser ? (
+								<div className="flex-1 flex justify-center items-center">
+									<TransactionsHistory />
+								</div>
+							) : (
+								<Navigate to="/" replace />
+							)
+						}
+					/>
+				</Routes>			</BrowserRouter>
 
 		</div>)
 }

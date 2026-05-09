@@ -3,10 +3,8 @@ import { Toaster } from 'react-hot-toast'
 import toast from 'react-hot-toast'
 import useLocalStorage from "../hooks/useLocalStorage"
 
-export default function Login() {
-    const [loggedUser, setLoggedUser] = useLocalStorage("user", null)
+export default function Login({ setLoggedUser, loggedUser }) {
     const [phone, setPhone] = useState("")
-    const [message, setMessage] = useState("")
     const [users, setUsers] = useState([
         { name: "Eslam", phoneNum: "01143676424" },
         { name: "Gamal", phoneNum: "01102991029" }
@@ -19,7 +17,6 @@ export default function Login() {
         const user = users.find((u) => u.phoneNum === phone)
 
         if (user) {
-            setMessage(`${user.name}`)
             setLoggedUser(user)
             setPhone("")
             toast.success('Logged in successfully!')
@@ -47,7 +44,7 @@ export default function Login() {
                         Login
                     </button>
                 </span>
-                <p className="mt-5 mb-5 text-lg text-black dark:text-white font-bold">Welcome : {message}</p>
+                <p className="mt-5 mb-5 text-lg text-black dark:text-white font-bold">Welcome : {loggedUser?.name}</p>
             </div>
 
         </div>
